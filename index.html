@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CleanWater - Lapor Tumpukan Sampah Kota Malang</title>
+<title>DrainAct - Lapor Tumpukan Sampah Kota Malang</title>
 <script>try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark')}catch(e){}</script>
 <script src="https://cdn.tailwindcss.com/3.4.17"></script>
 <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','system-ui','sans-serif']},colors:{b:'#0284C7',bh:'#0369A1'}}}}</script>
@@ -25,7 +25,8 @@
 
 <nav id="nav" class="sticky top-0 z-50 backdrop-blur border-b border-slate-200 dark:border-zinc-800 px-4 py-2.5">
  <div class="max-w-5xl mx-auto flex items-center justify-between gap-3 flex-wrap">
-  <span class="font-extrabold text-lg flex items-center gap-2"><span id="logo" class="w-7 h-7 rounded-full text-white grid place-items-center text-sm">C</span>CleanWater</span>
+  <span class="font-extrabold text-lg flex items-center gap-2"><span id="logo" class="w-7 h-7 rounded-full text-white grid place-items-center text-sm">C</span>DrainAct
+  </span>
   <div id="links" class="flex gap-1 text-xs font-semibold order-3 md:order-none w-full md:w-auto overflow-x-auto"></div>
   <div class="flex items-center gap-2">
    <div class="flex rounded-lg border border-slate-300 dark:border-zinc-700 overflow-hidden text-xs font-bold">
@@ -63,7 +64,7 @@
    <label class="mut block">Tingkat gangguan<select id="sev" class="inp mt-1"><option value="parah">Parah: bau parah atau jalan terhalang</option><option value="sedang">Sedang: menumpuk tapi belum menghalangi</option></select></label>
    <button class="btn w-full py-2.5">Kirim laporan ke petugas</button><p id="note" class="mut"></p>
   </form>
-  <div class="card"><h2 class="font-extrabold text-lg mb-1">Tanya CleanWater</h2><p class="mut mb-3">Pilih pertanyaan, jawaban langsung muncul.</p><div id="chat" class="space-y-2 text-xs min-h-[9rem]"></div><div id="chips" class="flex flex-wrap gap-2 mt-3"></div></div>
+  <div class="card"><h2 class="font-extrabold text-lg mb-1">Tanya DrainAct</h2><p class="mut mb-3">Pilih pertanyaan, jawaban langsung muncul.</p><div id="chat" class="space-y-2 text-xs min-h-[9rem]"></div><div id="chips" class="flex flex-wrap gap-2 mt-3"></div></div>
  </div>
 </main>
 
@@ -81,7 +82,7 @@
 </main>
 
 <main id="v-toko" class="view hidden wrap">
- <div class="flex flex-wrap justify-between items-end gap-2 mb-5"><div><h2 class="font-extrabold text-2xl">Toko CleanWater</h2><p class="mut">Beli dengan rupiah. Sebagian hasil penjualan membiayai pengangkutan sampah.</p></div><div id="cart" class="card !py-2 !px-4 text-xs"></div></div>
+ <div class="flex flex-wrap justify-between items-end gap-2 mb-5"><div><h2 class="font-extrabold text-2xl">Toko DrainAct</h2><p class="mut">Beli dengan rupiah. Sebagian hasil penjualan membiayai pengangkutan sampah.</p></div><div id="cart" class="card !py-2 !px-4 text-xs"></div></div>
  <div id="sp" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
 </main>
 
@@ -156,7 +157,7 @@ function clean(id){S.pend=id;$('#doneFile').click()}
 $('#doneFile').onchange=e=>{if(!e.target.files.length)return;const r=S.reports.find(x=>x.id==S.pend);r.done=1;S.cleaned++;
  if(r.mine&&S.login){S.pts+=50;S.hist.unshift('+50 poin: "'+r.loc+'" sudah diangkut')}
  toast(r.mine?(S.login?'Selesai. Pelapor mendapat 50 poin.':'Selesai. Pelapor tamu tidak mendapat poin.'):'Selesai. Foto bukti tersimpan.');e.target.value='';render()};
-$('#login').onclick=()=>{S.login=!S.login;render();toast(S.login?'Masuk sebagai Budi (demo).':'Kamu keluar.')};
+$('#login').onclick=()=>{S.login=!S.login;render();toast(S.login?'Masuk sebagai adiesdas (demo).':'Kamu keluar.')};
 $('#area').innerHTML=Object.keys(AREAS).map(a=>`<option>${a}</option>`).join('');
 $('#photo').onchange=e=>{const f=e.target.files[0],p=$('#prev');if(f){p.src=URL.createObjectURL(f);p.classList.remove('hidden')}else p.classList.add('hidden')};
 $('#form').onsubmit=e=>{e.preventDefault();if(!$('#photo').files.length)return toast('Foto bukti wajib dilampirkan.');
