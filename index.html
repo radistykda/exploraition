@@ -1,174 +1,800 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>DrainAct - Lapor Tumpukan Sampah Kota Malang</title>
-<script>try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark')}catch(e){}</script>
-<script src="https://cdn.tailwindcss.com/3.4.17"></script>
-<script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','system-ui','sans-serif']},colors:{b:'#0284C7',bh:'#0369A1'}}}}</script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap">
-<style type="text/tailwindcss">
-@layer components{
-.card{@apply bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-5}
-.btn{@apply px-4 py-2 rounded-lg text-xs font-bold text-white bg-b hover:bg-bh transition}
-.btn-g{@apply bg-green-600 hover:bg-green-700}
-.btn-o{@apply bg-amber-600 hover:bg-amber-700}
-.inp{@apply w-full text-xs rounded-lg p-2.5 border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-950}
-.mut{@apply text-xs text-slate-500 dark:text-zinc-400}
-.wrap{@apply max-w-5xl mx-auto px-4 py-8}
-}
-:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DrainAct - Civic Hydrology & Waste Prototype Suite</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              teal: '#2C7A7A',
+              darkTeal: '#1B4D4D',
+              deepTeal: '#103838',
+              mint: '#35C8A8',
+              aqua: '#5EEAD4',
+              softAqua: '#E4F8F4',
+              surface: '#F4FAF8',
+              darkBg: '#0B1B1B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #2C7A7A; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
 </head>
-<body class="font-sans bg-slate-50 text-slate-900 dark:bg-zinc-950 dark:text-zinc-100 antialiased">
+<body class="bg-[#F4FAF8] text-[#1E3E3E] font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-[#35C8A8] selection:text-white">
 
-<nav id="nav" class="sticky top-0 z-50 backdrop-blur border-b border-slate-200 dark:border-zinc-800 px-4 py-2.5">
- <div class="max-w-5xl mx-auto flex items-center justify-between gap-3 flex-wrap">
-  <span class="font-extrabold text-lg flex items-center gap-2"><span id="logo" class="w-7 h-7 rounded-full text-white grid place-items-center text-sm">D</span>DrainAct
-  </span>
-  <div id="links" class="flex gap-1 text-xs font-semibold order-3 md:order-none w-full md:w-auto overflow-x-auto"></div>
-  <div class="flex items-center gap-2">
-   <div class="flex rounded-lg border border-slate-300 dark:border-zinc-700 overflow-hidden text-xs font-bold">
-    <button id="r-warga" onclick="setRole('warga')" class="px-3 py-1.5">Warga</button>
-    <button id="r-petugas" onclick="setRole('petugas')" class="px-3 py-1.5">Petugas DLH</button>
-   </div>
-   <button onclick="theme()" class="px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-zinc-700 text-sm" aria-label="Ubah mode tampilan">🌓</button>
-   <span id="pts" class="text-xs font-bold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-zinc-800"></span>
-   <button id="login" class="btn"></button>
+  <!-- ================= TOP PROTOTYPE SWITCHER BANNER ================= -->
+  <aside class="bg-[#0B1B1B] text-white px-4 py-2 text-xs flex flex-wrap items-center justify-between border-b border-teal-900/60 sticky top-0 z-[60]">
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-teal-500/20 text-[#5EEAD4] font-semibold text-[11px]">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#35C8A8] animate-pulse"></span> FULL PROTOTYPE SUITE
+      </span>
+      <span class="text-slate-400 hidden sm:inline">&bull; Beralih antar modul antarmuka:</span>
+    </div>
+
+    <!-- Interactive Navigation Tabs -->
+    <div class="flex items-center gap-1.5 overflow-x-auto py-1">
+      <button onclick="switchTab('tab-resident')" id="btn-tab-resident" class="tab-btn px-3 py-1 rounded-md font-bold bg-[#2C7A7A] text-white text-[11px] transition-all">
+        1. Warga (Resident Hub)
+      </button>
+      <button onclick="switchTab('tab-dlh')" id="btn-tab-dlh" class="tab-btn px-3 py-1 rounded-md font-semibold text-slate-300 hover:text-white hover:bg-slate-800 text-[11px] transition-all">
+        2. Petugas DLH (Command Center)
+      </button>
+      <button onclick="switchTab('tab-seller')" id="btn-tab-seller" class="tab-btn px-3 py-1 rounded-md font-semibold text-slate-300 hover:text-white hover:bg-slate-800 text-[11px] transition-all">
+        3. UMKM Seller (Eco-Market)
+      </button>
+      <button onclick="openModal('report-modal')" class="px-2.5 py-1 rounded-md font-bold bg-[#C23B38] hover:bg-[#a92e2c] text-white text-[11px] flex items-center gap-1 shadow-sm">
+        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Tes Form Lapor
+      </button>
+      <button onclick="openModal('shop-modal')" class="px-2.5 py-1 rounded-md font-bold bg-teal-600 hover:bg-teal-500 text-white text-[11px] flex items-center gap-1 shadow-sm">
+        <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Tes Eco-Shop
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= 1. TAB: RESIDENT LANDING PAGE & USER HUB ================= -->
+  <div id="tab-resident" class="tab-content active">
+    <!-- Header Resident -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-teal-100 shadow-sm sticky top-[41px] z-50 transition-all">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Logo Lockup -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 flex-shrink-0">
+            <svg viewBox="0 0 512 512" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="primaryTeal1" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#1B4D4D"/>
+                  <stop offset="100%" stop-color="#2C7A7A"/>
+                </linearGradient>
+                <linearGradient id="vibrantMint1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#5EEAD4"/>
+                  <stop offset="100%" stop-color="#35C8A8"/>
+                </linearGradient>
+              </defs>
+              <g transform="translate(256, 256)">
+                <path d="M 0, -145 C 80, -145 145, -80 145, 0 C 145, 80 80, 145 0, 145 C -80, 145 -145, 80 -145, 0 C -145, -35 -132, -68 -110, -92 C -102, -100 -88, -92 -88, -80 C -88, -75 -92, -65 -95, -50 C -100, -35 -105, -18 -105, 0 C -105, 58 -58, 105 0, 105 C 58, 105 105, 58 105, 0 C 105, -58 58, -105 0, -105 C -12, -105 -22, -114 -22, -125 C -22, -136 -12, -145 0, -145 Z" fill="url(#primaryTeal1)"/>
+                <path d="M -15, -60 C 45, -45 70, 5 60, 55 C 45, 75 15, 80 -15, 60 C -40, 40 -50, 0 -35, -35 C -30, -48 -22, -56 -15, -60 Z" fill="url(#vibrantMint1)"/>
+                <path d="M -5, -15 C 18, -5 22, 18 15, 35 C 2, 45 -12, 38 -20, 22 C -26, 10 -20, -5 -5, -15 Z" fill="#FFFFFF"/>
+              </g>
+            </svg>
+          </div>
+          <div>
+            <span class="text-2xl font-bold tracking-tight text-slate-800">Drain<span class="text-[#2C7A7A]">Act</span></span>
+            <div class="text-[10px] font-bold text-slate-400 tracking-wider uppercase -mt-1">Civic Hydrology Platform</div>
+          </div>
+        </div>
+
+        <!-- Nav items -->
+        <nav class="hidden md:flex items-center gap-2">
+          <button onclick="switchTab('tab-resident')" class="px-3.5 py-2 text-sm font-semibold text-[#2C7A7A] bg-teal-50 rounded-lg">Warga &amp; Publik</button>
+          <button onclick="switchTab('tab-dlh')" class="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-[#2C7A7A] rounded-lg">Dinas DLH</button>
+          <button onclick="switchTab('tab-seller')" class="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-[#2C7A7A] rounded-lg">Eco-Marketplace</button>
+          <button onclick="openModal('shop-modal')" class="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-[#2C7A7A] rounded-lg">Katalog Reward</button>
+        </nav>
+
+        <!-- CTA & User -->
+        <div class="flex items-center gap-3">
+          <button onclick="openModal('report-modal')" class="bg-[#C23B38] hover:bg-[#a92e2c] text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-sm shadow-red-200 flex items-center gap-2">
+            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+            <span>+ Lapor Cepat (&lt;30s)</span>
+          </button>
+          <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
+            <div class="w-9 h-9 rounded-full bg-teal-100 text-[#1B4D4D] font-bold text-xs flex items-center justify-center border border-teal-300">
+              MLG
+            </div>
+            <div class="hidden lg:block text-left text-xs">
+              <div class="font-bold text-slate-800 leading-tight">Budi Pratama</div>
+              <div class="text-[10px] text-teal-700 font-semibold">1,250 Eco-Points</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+      <!-- 1. Hero -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-100/70 text-[#1B4D4D] text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-[#35C8A8] animate-pulse"></span>
+            CIVIC HYDRO RADAR &bull; MALANG RAYA REALTIME
+          </div>
+          <div>
+            <p class="text-xs font-bold tracking-wider text-[#2C7A7A] uppercase">Kanal Responsif Terintegrasi</p>
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+              Predict, Report, <span class="text-[#2C7A7A]">Resolve.</span>
+            </h1>
+            <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl pt-2">
+              Sistem pelaporan sumbatan drainase &amp; sampah liar dalam hitungan detik. Lindungi rukun tetangga Anda dari risiko banjir genangan &amp; wabah DBD secara instan.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <button onclick="openModal('report-modal')" class="bg-[#2C7A7A] hover:bg-[#1B4D4D] text-white px-5 py-3.5 rounded-xl text-sm font-bold shadow-md shadow-teal-700/20 flex items-center gap-2.5">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span>+ Buat Laporan Langsung (&lt;30 Detik)</span>
+            </button>
+            <button onclick="openModal('shop-modal')" class="bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-5 py-3.5 rounded-xl text-sm font-semibold flex items-center gap-2">
+              <i data-lucide="gift" class="w-4 h-4 text-[#2C7A7A]"></i>
+              <span>Tukar Poin Hadiah</span>
+            </button>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="grid grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-[#2C7A7A]">15.4K+</div>
+              <div class="text-xs text-slate-500 font-medium mt-0.5">Laporan Tuntas Malang</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-slate-800">94.8%</div>
+              <div class="text-xs text-slate-500 font-medium mt-0.5">Akurasi AI Severity</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-slate-800">~24 Min</div>
+              <div class="text-xs text-slate-500 font-medium mt-0.5">Respon Cepat DLH</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Hero Decorative Card -->
+        <div class="lg:col-span-5 bg-gradient-to-br from-[#E4F8F4] to-[#C9EFE7] rounded-3xl p-6 sm:p-8 border border-teal-200 shadow-md relative overflow-hidden flex flex-col justify-between min-h-[440px]">
+          <div class="flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold text-[#1B4D4D] shadow-sm">
+              <i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> DrainAct Smart Tech
+            </span>
+            <span class="inline-flex items-center gap-1.5 bg-[#2C7A7A] px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-sm">
+              100% Sirkular
+            </span>
+          </div>
+
+          <div class="my-auto py-6 flex flex-col items-center justify-center">
+            <div class="w-44 h-44 relative flex items-center justify-center">
+              <div class="absolute inset-0 rounded-full border-2 border-teal-500/20 animate-ping opacity-30"></div>
+              <div class="absolute inset-4 rounded-full border border-teal-500/30"></div>
+              <div class="absolute inset-8 rounded-full bg-white/40 backdrop-blur shadow-inner"></div>
+
+              <svg class="w-32 h-32 relative z-10" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M70 40H130V65C130 65 145 75 145 95C145 115 130 120 130 145H70C70 120 55 115 55 95C55 75 70 65 70 65V40Z" fill="#2C7A7A" fill-opacity="0.85" stroke="#1B4D4D" stroke-width="4"/>
+                <ellipse cx="100" cy="40" rx="30" ry="10" fill="#35C8A8"/>
+                <path d="M60 140C60 140 75 160 100 160C125 160 140 140 140 140C140 140 135 170 100 170C65 170 60 140 60 140Z" fill="#1B4D4D"/>
+                <circle cx="100" cy="100" r="14" fill="#5EEAD4"/>
+                <path d="M100 80C100 80 115 95 100 115C85 95 100 80 100 80Z" fill="#FFFFFF"/>
+              </svg>
+            </div>
+            <div class="mt-2 text-xs font-bold text-teal-900 bg-white/80 px-3 py-1 rounded-full">
+              Kondisi Saluran Terjaga &bull; Debit Lancar
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-white/90 backdrop-blur rounded-xl p-3 border border-teal-100 flex items-center gap-2.5">
+              <i data-lucide="check-circle" class="w-5 h-5 text-[#2C7A7A]"></i>
+              <div>
+                <div class="text-[10px] text-slate-500 font-medium">Kawasan Anda</div>
+                <div class="text-xs font-bold text-slate-800">Zona Aman Hijau</div>
+              </div>
+            </div>
+            <div class="bg-white/90 backdrop-blur rounded-xl p-3 border border-teal-100 flex items-center gap-2.5">
+              <i data-lucide="droplet" class="w-5 h-5 text-[#2C7A7A]"></i>
+              <div>
+                <div class="text-[10px] text-slate-500 font-medium">Elevasi Air</div>
+                <div class="text-xs font-bold text-slate-800">Normal 22cm</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Interactive GIS Live Radar -->
+      <section class="bg-[#122B2B] text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="text-xs font-bold text-[#35C8A8] uppercase tracking-wider">GIS Live Inundation &amp; Trash Clutter Radar</div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1">Pantau Titik Kritis di Lingkungan Anda</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1">Sensor telemetri drainase &amp; titik laporan liar warga secara realtime.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1.5 rounded-xl border border-emerald-500/30">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Sensor Aktif: 48 Titik
+            </span>
+          </div>
+        </div>
+
+        <!-- Radar Screen Simulator -->
+        <div class="w-full h-80 rounded-2xl bg-[#091717] border border-teal-900/60 relative overflow-hidden flex items-center justify-center">
+          <svg class="absolute inset-0 w-full h-full opacity-15">
+            <defs>
+              <pattern id="grid1" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#5EEAD4" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid1)" />
+          </svg>
+
+          <!-- Simulated Map paths -->
+          <svg class="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 800 400" preserveAspectRatio="none">
+            <path d="M-50,200 Q200,100 400,250 T850,150" fill="none" stroke="#2C7A7A" stroke-width="6"/>
+            <path d="M100,-20 L250,420" fill="none" stroke="#1E4D4D" stroke-width="3"/>
+            <path d="M550,-20 L480,420" fill="none" stroke="#1E4D4D" stroke-width="3"/>
+          </svg>
+
+          <!-- Markers -->
+          <div class="absolute top-1/3 left-1/4 transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer" onclick="alert('Lokasi: Jl. Simpang Gajayana (Timbunan Sampah Plastik 88% - Armada Truk OTW)')">
+            <span class="relative flex h-6 w-6">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-6 w-6 bg-red-600 border-2 border-white items-center justify-center text-white text-[10px] font-bold">!</span>
+            </span>
+            <div class="absolute bottom-7 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded shadow whitespace-nowrap hidden group-hover:block">
+              Simpang Gajayana (Kritis)
+            </div>
+          </div>
+
+          <div class="absolute top-1/2 left-2/3 transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer" onclick="alert('Lokasi: Jl. Bandung (Sedimen Pasir Usai Hujan - Status Selesai)')">
+            <span class="relative flex h-5 w-5">
+              <span class="relative inline-flex rounded-full h-5 w-5 bg-amber-500 border-2 border-white"></span>
+            </span>
+          </div>
+
+          <div class="absolute bottom-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer" onclick="alert('Lokasi: Sawojajar Saluran Induk (Sensor Elevasi Normal 20cm)')">
+            <span class="relative inline-flex rounded-full h-5 w-5 bg-emerald-500 border-2 border-white items-center justify-center text-white">
+              <i data-lucide="check" class="w-3 h-3"></i>
+            </span>
+          </div>
+
+          <div class="absolute bottom-4 right-4">
+            <button onclick="alert('Membuka layer peta telemetri penuh kota Malang...')" class="bg-teal-700/80 hover:bg-teal-700 text-white text-xs px-3.5 py-2 rounded-xl border border-teal-500/30 flex items-center gap-1.5 shadow">
+              <i data-lucide="maximize-2" class="w-4 h-4"></i> Layar Penuh GIS
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Resolution Pipeline -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs font-bold text-[#2C7A7A] uppercase tracking-wider">Live Resolution Pipeline</div>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Status Tindak Lanjut Laporan</h2>
+          </div>
+          <button onclick="openModal('report-modal')" class="text-xs font-bold text-[#2C7A7A] hover:underline flex items-center gap-1">
+            + Tambah Laporan Baru <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Card 1 -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-600">#RPT-2025-0842</span>
+                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-red-100 text-red-700">Severity: 88% (Parah)</span>
+              </div>
+              <span class="text-xs font-bold text-[#2C7A7A]">OTW (~18 Menit)</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Timbunan Sampah Plastik &amp; Ranting di Gorong-Gorong</h4>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i> Jl. Simpang Gajayana No. 14 &bull; 38 mnt lalu
+              </p>
+            </div>
+            <div class="bg-teal-50 rounded-xl p-3 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded bg-[#2C7A7A] text-white font-bold flex items-center justify-center text-[10px]">TR</span>
+                <div>
+                  <div class="font-bold text-slate-800">Armada Satgas DLH Regu 03</div>
+                  <div class="text-[10px] text-slate-500">Truk Hidrolik N 8201 AP</div>
+                </div>
+              </div>
+              <button onclick="alert('Melacak posisi live GPS armada Truk DLH Regu 03 di peta...')" class="px-2.5 py-1.5 bg-white text-[#2C7A7A] border border-teal-200 rounded-lg font-bold text-xs">
+                Lacak GPS
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-600">#RPT-2025-0839</span>
+                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800">Severity: 54%</span>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">TUNTAS</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Sedimentasi Pasir &amp; Limbah Daun Pasca Hujan</h4>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i> Saluran Jl. Bandung No. 8 &bull; Ditangani DLH
+              </p>
+            </div>
+            <div class="bg-emerald-50 rounded-xl p-3 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2">
+                <i data-lucide="award" class="w-5 h-5 text-emerald-600"></i>
+                <div>
+                  <div class="font-bold text-slate-800">Reward Ditambahkan</div>
+                  <div class="text-[10px] text-slate-500">+50 Eco-Points masuk ke dompet Anda</div>
+                </div>
+              </div>
+              <button onclick="openModal('shop-modal')" class="px-2.5 py-1.5 bg-white text-emerald-700 border border-emerald-200 rounded-lg font-bold text-xs">
+                Tukar Poin
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
- </div>
-</nav>
-<div id="banner" class="text-center text-xs font-semibold py-1.5"></div>
 
-<!-- ===== WARGA ===== -->
-<main id="v-home" class="view hidden">
- <header class="max-w-3xl mx-auto px-4 pt-12 pb-6 text-center">
-  <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.05]">Ada tumpukan sampah yang mengganggu? Laporkan, kami bantu angkut.</h1>
-  <p class="mt-5 text-sm md:text-base text-slate-600 dark:text-zinc-400 max-w-xl mx-auto">Tumpukan di pinggir jalan, lahan kosong, atau dekat rumah yang berbau dan menghalangi jalan. Petugas mengangkutnya, kamu dapat poin untuk ditukar kompos dan barang daur ulang.</p>
-  <div class="flex flex-wrap justify-center gap-3 mt-7"><button onclick="go('lapor')" class="btn px-6 py-3">Lapor tumpukan sampah</button><button onclick="go('tukar')" class="btn btn-g px-6 py-3">Tukar poin</button><button onclick="go('toko')" class="btn bg-zinc-700 hover:bg-zinc-800 px-6 py-3">Buka toko</button></div>
-  <div id="stats" class="card grid grid-cols-3 gap-3 max-w-md mx-auto mt-10 !p-4"></div>
- </header>
- <section class="wrap"><div class="card"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="font-extrabold text-lg">Peta panas tumpukan sampah Kota Malang</h2><p class="mut">Semakin besar dan merah, semakin banyak tumpukan yang belum diangkut.</p></div><div class="filters flex gap-2 items-start text-xs"></div></div><div id="heat" class="heat relative h-80 rounded-xl overflow-hidden bg-slate-900 text-white"></div></div></section>
-</main>
+  <!-- ================= 2. TAB: DLH COMMAND CENTER (TASK-FIRST) ================= -->
+  <div id="tab-dlh" class="tab-content">
+    <header class="bg-slate-900 text-white border-b border-slate-800 shadow-sm sticky top-[41px] z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 flex-shrink-0">
+            <svg viewBox="0 0 512 512" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(256, 256)">
+                <path d="M 0, -145 C 80, -145 145, -80 145, 0 C 145, 80 80, 145 0, 145 C -80, 145 -145, 80 -145, 0 Z" fill="#2C7A7A"/>
+                <path d="M -15, -60 C 45, -45 70, 5 60, 55 C 45, 75 15, 80 -15, 60 Z" fill="#5EEAD4"/>
+              </g>
+            </svg>
+          </div>
+          <div>
+            <span class="text-2xl font-bold tracking-tight text-white">Drain<span class="text-[#35C8A8]">Act</span></span>
+            <div class="text-[10px] font-bold text-teal-400 tracking-wider uppercase -mt-1">DLH Command Center Portal</div>
+          </div>
+        </div>
 
-<main id="v-lapor" class="view hidden wrap">
- <div class="grid md:grid-cols-2 gap-5">
-  <form id="form" class="card space-y-3">
-   <h2 class="font-extrabold text-lg">Laporkan tumpukan sampah</h2>
-   <label class="mut block">Foto bukti (wajib)<input id="photo" type="file" accept="image/*" class="inp mt-1"></label>
-   <img id="prev" class="hidden w-full h-40 object-cover rounded-lg" alt="Pratinjau foto">
-   <label class="mut block">Jenis masalah<select id="cat" class="inp mt-1"><option>Tumpukan sampah liar di pinggir jalan</option><option>Sampah menghalangi jalan</option><option>Bau menyengat dekat permukiman</option><option>TPS penuh dan meluber</option><option>Sampah menyumbat saluran air</option></select></label>
-   <label class="mut block">Kecamatan<select id="area" class="inp mt-1"></select></label>
-   <label class="mut block">Lokasi detail<input id="loc" class="inp mt-1" placeholder="Contoh: Lahan kosong samping Jl. Kawi No. 12" required></label>
-   <label class="mut block">Tingkat gangguan<select id="sev" class="inp mt-1"><option value="parah">Parah: bau parah atau jalan terhalang</option><option value="sedang">Sedang: menumpuk tapi belum menghalangi</option></select></label>
-   <button class="btn w-full py-2.5">Kirim laporan ke petugas</button><p id="note" class="mut"></p>
-  </form>
-  <div class="card"><h2 class="font-extrabold text-lg mb-1">Tanya DrainAct</h2><p class="mut mb-3">Pilih pertanyaan, jawaban langsung muncul.</p><div id="chat" class="space-y-2 text-xs min-h-[9rem]"></div><div id="chips" class="flex flex-wrap gap-2 mt-3"></div></div>
- </div>
-</main>
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 bg-teal-900/60 text-teal-300 text-xs px-3 py-1.5 rounded-lg border border-teal-700/50">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Dispatch Engine Ready
+          </span>
+          <button onclick="alert('Memperbarui telemetri seluruh armada DLH...')" class="bg-[#2C7A7A] hover:bg-teal-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh Data
+          </button>
+        </div>
+      </div>
+    </header>
 
-<main id="v-poin" class="view hidden wrap">
- <div class="card flex flex-wrap items-center justify-between gap-4"><div><div class="mut">Saldo poin kamu</div><div id="bal" class="text-4xl font-extrabold text-amber-500"></div></div><div class="flex gap-2"><button onclick="go('tukar')" class="btn btn-g">Tukar poin</button><button onclick="go('toko')" class="btn">Beli di toko</button></div></div>
- <div class="grid md:grid-cols-2 gap-4 mt-4">
-  <div class="card"><h3 class="font-bold text-sm mb-2">Laporan saya</h3><ul id="mine" class="space-y-2 text-xs"></ul></div>
-  <div class="card"><h3 class="font-bold text-sm mb-2">Riwayat poin</h3><ul id="hist" class="mut space-y-1"></ul></div>
- </div>
-</main>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <!-- Command Summary Metrics -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold">Antrean Laporan Masuk</div>
+          <div class="text-2xl font-extrabold text-red-600 mt-1">14 Kasus</div>
+          <div class="text-[11px] text-red-600 font-medium mt-1">4 berkategori Kritis (AI Severity &gt; 80%)</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold">Armada Satgas Aktif</div>
+          <div class="text-2xl font-extrabold text-[#2C7A7A] mt-1">8 / 10 Truk</div>
+          <div class="text-[11px] text-teal-700 font-medium mt-1">2 Truk standby di Depo Lowokwaru</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold">Rata-rata Durasi Response</div>
+          <div class="text-2xl font-extrabold text-slate-800 mt-1">19.4 Menit</div>
+          <div class="text-[11px] text-emerald-600 font-medium mt-1">&darr; 4.2 mnt lebih cepat dari SLA standar</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold">Volume Sedimen Terangkat</div>
+          <div class="text-2xl font-extrabold text-slate-800 mt-1">4.8 Ton</div>
+          <div class="text-[11px] text-slate-500 font-medium mt-1">Tercatat hari ini di TPA Supit Urang</div>
+        </div>
+      </div>
 
-<main id="v-tukar" class="view hidden wrap">
- <div class="flex justify-between items-end mb-5"><div><h2 class="font-extrabold text-2xl">Tukar poin</h2><p class="mut">Hasil olahan sampah dari mitra pengolah.</p></div><b id="bal2" class="text-amber-500 text-xl"></b></div>
- <div id="rw" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
-</main>
+      <!-- Action Dispatch Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50">
+          <div>
+            <h3 class="font-bold text-slate-900 text-base">Antrean Disposisi Petugas Lapangan</h3>
+            <p class="text-xs text-slate-500">Tentukan regu satgas &amp; verifikasi bukti sebelum penugasan armada.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="text" placeholder="Cari ID laporan / jalan..." class="px-3 py-1.5 border border-slate-200 rounded-lg text-xs w-48">
+            <button class="px-3 py-1.5 bg-slate-800 text-white rounded-lg text-xs font-semibold">Filter</button>
+          </div>
+        </div>
 
-<main id="v-toko" class="view hidden wrap">
- <div class="flex flex-wrap justify-between items-end gap-2 mb-5"><div><h2 class="font-extrabold text-2xl">Toko DrainAct</h2><p class="mut">Beli dengan rupiah. Sebagian hasil penjualan membiayai pengangkutan sampah.</p></div><div id="cart" class="card !py-2 !px-4 text-xs"></div></div>
- <div id="sp" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
-</main>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+              <tr>
+                <th class="p-3.5">ID &amp; Jam</th>
+                <th class="p-3.5">Lokasi &amp; Deskripsi</th>
+                <th class="p-3.5">Analisis AI</th>
+                <th class="p-3.5">Status Armada</th>
+                <th class="p-3.5 text-right">Aksi Komando</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="hover:bg-teal-50/50">
+                <td class="p-3.5 font-bold text-slate-800">
+                  #RPT-0842<br><span class="text-[10px] text-slate-400 font-normal">10:14 WIB</span>
+                </td>
+                <td class="p-3.5">
+                  <div class="font-bold text-slate-800">Jl. Simpang Gajayana No. 14</div>
+                  <div class="text-[11px] text-slate-500">Timbunan plastik mampet di culvert 80cm</div>
+                </td>
+                <td class="p-3.5">
+                  <span class="inline-block px-2 py-0.5 rounded font-bold bg-red-100 text-red-700 text-[10px]">Severity 88% (Kritis)</span>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Est. Sedimen: ~450 kg</div>
+                </td>
+                <td class="p-3.5">
+                  <span class="inline-block px-2 py-0.5 rounded font-bold bg-amber-100 text-amber-800 text-[10px]">Truk Regu 03 En Route</span>
+                </td>
+                <td class="p-3.5 text-right space-x-1">
+                  <button onclick="alert('Mengirim instruksi darurat ke Satgas 03...')" class="px-2.5 py-1.5 bg-[#2C7A7A] text-white rounded-lg font-bold">Disposisi</button>
+                  <button onclick="alert('Membuka foto AI dan detail telemetri culvert...')" class="px-2.5 py-1.5 border border-slate-200 rounded-lg">Detail</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-teal-50/50">
+                <td class="p-3.5 font-bold text-slate-800">
+                  #RPT-0841<br><span class="text-[10px] text-slate-400 font-normal">09:50 WIB</span>
+                </td>
+                <td class="p-3.5">
+                  <div class="font-bold text-slate-800">Pasar Oro-Oro Dowo</div>
+                  <div class="text-[11px] text-slate-500">Sisa sayuran &amp; ampas organik menutup kisi besi</div>
+                </td>
+                <td class="p-3.5">
+                  <span class="inline-block px-2 py-0.5 rounded font-bold bg-amber-100 text-amber-800 text-[10px]">Severity 62% (Sedang)</span>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Potensi bau &amp; lalat</div>
+                </td>
+                <td class="p-3.5">
+                  <span class="inline-block px-2 py-0.5 rounded font-bold bg-slate-100 text-slate-600 text-[10px]">Menunggu Jadwal</span>
+                </td>
+                <td class="p-3.5 text-right space-x-1">
+                  <button onclick="alert('Menugaskan Regu Satgas 05 ke Pasar Oro-Oro Dowo...')" class="px-2.5 py-1.5 bg-[#2C7A7A] text-white rounded-lg font-bold">Tugaskan</button>
+                  <button onclick="alert('Membuka foto AI...')" class="px-2.5 py-1.5 border border-slate-200 rounded-lg">Detail</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
 
-<!-- ===== PETUGAS ===== -->
-<main id="v-antrean" class="view hidden wrap">
- <div class="grid grid-cols-3 gap-3 mb-5" id="pstats"></div>
- <div class="card border-amber-300 dark:border-amber-800"><h2 class="font-extrabold text-lg">Antrean tugas pengangkutan</h2><p class="mut mb-4">Urut dari yang paling parah. Setelah mengangkut, unggah foto bukti lokasi bersih.</p><div id="queue" class="space-y-2"></div><input id="doneFile" type="file" accept="image/*" class="hidden"></div>
-</main>
-<main id="v-peta" class="view hidden wrap"><div class="card border-amber-300 dark:border-amber-800"><div class="flex flex-wrap justify-between gap-3 mb-4"><div><h2 class="font-extrabold text-lg">Peta tugas wilayah</h2><p class="mut">Pilih wilayah yang padat untuk merencanakan rute armada.</p></div><div class="filters flex gap-2 items-start text-xs"></div></div><div id="heat2" class="heat relative h-96 rounded-xl overflow-hidden bg-slate-900 text-white"></div></div></main>
-<main id="v-riwayat" class="view hidden wrap"><div class="card border-amber-300 dark:border-amber-800"><h2 class="font-extrabold text-lg mb-3">Riwayat tugas selesai</h2><ul id="done" class="space-y-2 text-xs"></ul></div></main>
+  <!-- ================= 3. TAB: ECO-MARKETPLACE SELLER PORTAL ================= -->
+  <div id="tab-seller" class="tab-content">
+    <header class="bg-white border-b border-teal-100 shadow-sm sticky top-[41px] z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 flex-shrink-0">
+            <svg viewBox="0 0 512 512" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(256, 256)">
+                <path d="M 0, -145 C 80, -145 145, -80 145, 0 C 145, 80 80, 145 0, 145 C -80, 145 -145, 80 -145, 0 Z" fill="#2C7A7A"/>
+                <path d="M -15, -60 C 45, -45 70, 5 60, 55 C 45, 75 15, 80 -15, 60 Z" fill="#35C8A8"/>
+              </g>
+            </svg>
+          </div>
+          <div>
+            <span class="text-2xl font-bold tracking-tight text-slate-800">Drain<span class="text-[#2C7A7A]">Act</span></span>
+            <div class="text-[10px] font-bold text-teal-700 tracking-wider uppercase -mt-1">Eco-Marketplace Seller Hub</div>
+          </div>
+        </div>
 
-<div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-xl max-w-[90vw]"></div>
+        <div class="flex items-center gap-3">
+          <span class="px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 text-xs font-bold border border-teal-200">
+            Toko: CV Berkah Kompos Malang
+          </span>
+          <button onclick="alert('Membuka dialog tambah produk katalog daur ulang...')" class="bg-[#2C7A7A] hover:bg-[#1B4D4D] text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Tambah Produk
+          </button>
+        </div>
+      </div>
+    </header>
 
-<script>
-const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const rp=n=>'Rp'+n.toLocaleString('id-ID');
-const AREAS={Klojen:[50,48],Blimbing:[70,28],Lowokwaru:[32,26],Sukun:[30,70],Kedungkandang:[72,70]};
-const NAV={warga:[['home','Beranda'],['lapor','Lapor'],['poin','Poin Saya'],['tukar','Tukar Poin'],['toko','Toko']],petugas:[['antrean','Antrean Tugas'],['peta','Peta Tugas'],['riwayat','Riwayat Selesai']]};
-const PROD=[{n:'Pupuk kompos organik 5 kg',e:'🌱',pts:150,rp:35000,d:'Dari sisa makanan terpilah'},{n:'Pot tanaman daur ulang',e:'🪴',pts:200,rp:25000,d:'Botol plastik terpilah'},{n:'Tas anyaman plastik',e:'👜',pts:250,rp:45000,d:'Karya pengrajin lokal'},{n:'Pupuk cair organik 1 L',e:'🧴',pts:120,rp:20000,d:'Fermentasi sampah dapur'}];
-const S={role:'warga',view:'home',login:false,pts:450,hist:[],cart:{},added:0,cleaned:0,filter:'semua',pend:null,reports:[
-{id:1,area:'Kedungkandang',loc:'Lahan kosong dekat Sawojajar Gang 5',cat:'Tumpukan sampah liar di pinggir jalan',sev:'parah'},
-{id:2,area:'Lowokwaru',loc:'Pinggir Jl. Soekarno-Hatta',cat:'Sampah menghalangi jalan',sev:'sedang'},
-{id:3,area:'Klojen',loc:'Pojok pasar dekat Jl. Kawi',cat:'Bau menyengat dekat permukiman',sev:'parah'},
-{id:4,area:'Blimbing',loc:'TPS perumahan Araya',cat:'TPS penuh dan meluber',sev:'sedang'},
-{id:5,area:'Sukun',loc:'Tepi sungai Jl. Bandulan',cat:'Tumpukan sampah liar di pinggir jalan',sev:'parah'},
-{id:6,area:'Klojen',loc:'Lahan kosong Jl. Semeru',cat:'Tumpukan sampah liar di pinggir jalan',sev:'parah',done:1},
-{id:7,area:'Blimbing',loc:'Pinggir Jl. Borobudur',cat:'Sampah menghalangi jalan',sev:'sedang',done:1}]};
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <!-- Seller KPI -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold">Total Penukaran Voucher Poin Warga</div>
+          <div class="text-2xl font-extrabold text-[#2C7A7A] mt-1">184 Klaim</div>
+          <div class="text-[11px] text-teal-700 mt-1">Klaim subsidi disalurkan langsung oleh Pemkot</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold">Material Sampah Terserap</div>
+          <div class="text-2xl font-extrabold text-slate-800 mt-1">1,420 Kg</div>
+          <div class="text-[11px] text-slate-500 mt-1">Limbah organik &amp; plastik diolah menjadi paving/kompos</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+          <div class="text-xs text-slate-500 font-semibold">Saldo Pendapatan Merchant</div>
+          <div class="text-2xl font-extrabold text-emerald-600 mt-1">Rp 9.250.000</div>
+          <div class="text-[11px] text-emerald-700 mt-1">Tersedia dicairkan ke rekening bank</div>
+        </div>
+      </div>
 
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.add('hidden'),3000)}
-function theme(){const d=document.documentElement.classList.toggle('dark');try{localStorage.setItem('theme',d?'dark':'light')}catch(e){}}
-function go(v){S.view=v;render();scrollTo(0,0)}
-function setRole(r){S.role=r;S.view=NAV[r][0][0];render();scrollTo(0,0)}
+      <!-- Catalog Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <h3 class="font-bold text-slate-900 text-base">Katalog Produk Daur Ulang &amp; Sirkular</h3>
+          <span class="text-xs text-slate-500">3 Produk Aktif</span>
+        </div>
+        <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Item 1 -->
+          <div class="border border-slate-200 rounded-2xl p-4 space-y-3 hover:border-teal-300 transition-all">
+            <div class="h-32 bg-teal-50 rounded-xl flex items-center justify-center text-[#2C7A7A]">
+              <i data-lucide="package" class="w-12 h-12"></i>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold text-teal-700 bg-teal-100 px-2 py-0.5 rounded">150 Poin Warga</span>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Pupuk Kompos Organik Super (5kg)</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Hasil fermentasi limbah dedaunan gorong-gorong.</p>
+            </div>
+            <div class="text-xs font-semibold text-slate-700 flex justify-between border-t pt-2">
+              <span>Stok: 45 Karung</span>
+              <span class="text-emerald-600">Aktif Dijual</span>
+            </div>
+          </div>
 
-function heat(id){
- const vis=S.reports.filter(r=>S.filter=='semua'||(S.filter=='bersih'?r.done:!r.done&&r.sev==S.filter));
- $(id).innerHTML='<div class="absolute inset-0 opacity-20" style="background:radial-gradient(#22C55E 1px,transparent 1px) 0 0/16px 16px"></div>'+Object.entries(AREAS).map(([a,[x,y]])=>{
-  const l=vis.filter(r=>r.area==a),act=l.filter(r=>!r.done),bad=act.some(r=>r.sev=='parah');
-  const c=!act.length?'rgba(34,197,94,.45)':bad?'rgba(225,29,72,.55)':'rgba(245,158,11,.5)',z=l.length?50+l.length*22:24;
-  return `<div class="absolute" style="left:${x}%;top:${y}%"><div class="absolute rounded-full blur-xl -translate-x-1/2 -translate-y-1/2" style="width:${z}px;height:${z}px;background:${c}"></div><div class="relative -translate-x-1/2 -translate-y-1/2 text-center text-[11px] font-bold whitespace-nowrap">${a}<div class="font-normal text-slate-300">${l.length} laporan</div></div></div>`}).join('')}
+          <!-- Item 2 -->
+          <div class="border border-slate-200 rounded-2xl p-4 space-y-3 hover:border-teal-300 transition-all">
+            <div class="h-32 bg-teal-50 rounded-xl flex items-center justify-center text-[#2C7A7A]">
+              <i data-lucide="layers" class="w-12 h-12"></i>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold text-teal-700 bg-teal-100 px-2 py-0.5 rounded">300 Poin Warga</span>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Paving Block Plastik Daur Ulang</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Kuat tekan tinggi dari cacahan kresek saring drainase.</p>
+            </div>
+            <div class="text-xs font-semibold text-slate-700 flex justify-between border-t pt-2">
+              <span>Stok: 210 Buah</span>
+              <span class="text-emerald-600">Aktif Dijual</span>
+            </div>
+          </div>
 
-function render(){
- const P=S.role=='petugas';
- $('#nav').className='sticky top-0 z-50 backdrop-blur border-b px-4 py-2.5 '+(P?'bg-amber-100/95 dark:bg-amber-950/95 border-amber-300 dark:border-amber-800':'bg-white/90 dark:bg-zinc-900/90 border-slate-200 dark:border-zinc-800');
- $('#logo').className='w-7 h-7 rounded-full text-white grid place-items-center text-sm '+(P?'bg-amber-600':'bg-b');
- $('#banner').className='text-center text-xs font-semibold py-1.5 '+(P?'bg-amber-600 text-white':'bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-200');
- $('#banner').textContent=P?'Mode Petugas DLH: hanya untuk petugas terdaftar. Pelapor tidak melihat halaman ini.':'Mode Warga: lapor tumpukan sampah, kumpulkan poin, tukar hadiah.';
- for(const r of ['warga','petugas'])$('#r-'+r).className='px-3 py-1.5 '+(S.role==r?(P?'bg-amber-600 text-white':'bg-b text-white'):'bg-transparent');
- $('#links').innerHTML=NAV[S.role].map(([v,l])=>`<button onclick="go('${v}')" class="px-3 py-1.5 rounded-lg whitespace-nowrap ${S.view==v?(P?'bg-amber-600 text-white':'bg-b text-white'):'text-slate-600 dark:text-zinc-400'}">${l}</button>`).join('');
- $$('.view').forEach(e=>e.classList.add('hidden'));$('#v-'+S.view).classList.remove('hidden');
- $('#pts').classList.toggle('hidden',P);$('#login').classList.toggle('hidden',P);
- $('#login').textContent=S.login?'Keluar':'Masuk';$('#pts').textContent=S.login?'🪙 '+S.pts+' poin':'Tamu';
- $('#bal').textContent=$('#bal2').textContent=S.login?S.pts+' poin':'Masuk dulu';
- $('#stats').innerHTML=[[12408+S.added,'Laporan masuk'],[847+S.cleaned,'Tumpukan diangkut'],['14,8 ton','Sampah terolah']].map(([v,l])=>`<div><div class="text-xl font-extrabold">${typeof v=='number'?v.toLocaleString('id-ID'):v}</div><div class="mut">${l}</div></div>`).join('');
- $$('.filters').forEach(f=>f.innerHTML=['semua','parah','sedang','bersih'].map(x=>`<button onclick="S.filter='${x}';render()" class="px-3 py-1 rounded-md capitalize ${S.filter==x?(P?'bg-amber-600 text-white':'bg-b text-white'):'bg-slate-100 dark:bg-zinc-800'}">${x}</button>`).join(''));
- heat('#heat');heat('#heat2');
- const act=S.reports.filter(r=>!r.done).sort((a,b)=>(a.sev=='parah'?0:1)-(b.sev=='parah'?0:1));
- $('#pstats').innerHTML=[[act.length,'Menunggu diangkut'],[act.filter(r=>r.sev=='parah').length,'Prioritas parah'],[S.reports.filter(r=>r.done).length,'Selesai']].map(([v,l])=>`<div class="card !p-4 text-center border-amber-300 dark:border-amber-800"><div class="text-2xl font-extrabold text-amber-600">${v}</div><div class="mut">${l}</div></div>`).join('');
- $('#queue').innerHTML=act.map(r=>`<div class="flex items-center justify-between gap-3 border border-slate-200 dark:border-zinc-800 rounded-xl p-3"><div><div class="text-sm font-bold">${esc(r.loc)}</div><div class="mut">${r.area} · ${esc(r.cat)} · <b class="${r.sev=='parah'?'text-rose-500':'text-amber-500'}">${r.sev}</b></div></div><button onclick="clean(${r.id})" class="btn btn-o shrink-0">Unggah foto bersih</button></div>`).join('')||'<p class="mut">Semua tumpukan sudah diangkut.</p>';
- $('#done').innerHTML=S.reports.filter(r=>r.done).map(r=>`<li class="border border-slate-200 dark:border-zinc-800 rounded-xl p-3">✅ <b>${esc(r.loc)}</b> <span class="mut">· ${r.area}</span></li>`).join('')||'<li class="mut">Belum ada.</li>';
- $('#mine').innerHTML=S.reports.filter(r=>r.mine).map(r=>`<li class="border border-slate-200 dark:border-zinc-800 rounded-lg p-2">${esc(r.loc)}<div class="mut">${r.done?'✅ Sudah diangkut':'⏳ Menunggu petugas'}</div></li>`).join('')||'<li class="mut">Belum ada laporan.</li>';
- $('#hist').innerHTML=S.hist.map(h=>`<li>${esc(h)}</li>`).join('')||'<li>Belum ada aktivitas.</li>';
- $('#rw').innerHTML=PROD.map((p,i)=>`<div class="card"><div class="h-24 grid place-items-center text-5xl rounded-lg bg-slate-100 dark:bg-zinc-950 mb-3">${p.e}</div><h4 class="font-bold text-sm">${p.n}</h4><p class="mut my-1">${p.d}</p><div class="flex justify-between items-center mt-3"><b class="text-amber-500 text-xs">${p.pts} poin</b><button onclick="redeem(${i})" class="btn btn-g">Tukar</button></div></div>`).join('');
- $('#sp').innerHTML=PROD.map((p,i)=>`<div class="card"><div class="h-24 grid place-items-center text-5xl rounded-lg bg-slate-100 dark:bg-zinc-950 mb-3">${p.e}</div><h4 class="font-bold text-sm">${p.n}</h4><p class="mut my-1">${p.d}</p><div class="flex justify-between items-center mt-3"><b class="text-xs">${rp(p.rp)}</b><button onclick="add(${i})" class="btn">Tambah</button></div></div>`).join('');
- const n=Object.values(S.cart).reduce((a,b)=>a+b,0),tot=Object.entries(S.cart).reduce((a,[i,q])=>a+PROD[i].rp*q,0);
- $('#cart').innerHTML=n?`🛒 ${n} barang · <b>${rp(tot)}</b> <button onclick="checkout()" class="btn ml-2">Bayar</button>`:'🛒 Keranjang kosong';
-}
-function redeem(i){const p=PROD[i];if(!S.login)return toast('Masuk dulu untuk menukar poin.');if(S.pts<p.pts)return toast('Poin kurang '+(p.pts-S.pts)+'.');S.pts-=p.pts;S.hist.unshift('-'+p.pts+' poin: tukar '+p.n);render();toast('Berhasil ditukar: '+p.n)}
-function add(i){S.cart[i]=(S.cart[i]||0)+1;render()}
-function checkout(){S.cart={};render();toast('Pesanan dibuat (simulasi).')}
-function clean(id){S.pend=id;$('#doneFile').click()}
-$('#doneFile').onchange=e=>{if(!e.target.files.length)return;const r=S.reports.find(x=>x.id==S.pend);r.done=1;S.cleaned++;
- if(r.mine&&S.login){S.pts+=50;S.hist.unshift('+50 poin: "'+r.loc+'" sudah diangkut')}
- toast(r.mine?(S.login?'Selesai. Pelapor mendapat 50 poin.':'Selesai. Pelapor tamu tidak mendapat poin.'):'Selesai. Foto bukti tersimpan.');e.target.value='';render()};
-$('#login').onclick=()=>{S.login=!S.login;render();toast(S.login?'Masuk sebagai adiesdas (demo).':'Kamu keluar.')};
-$('#area').innerHTML=Object.keys(AREAS).map(a=>`<option>${a}</option>`).join('');
-$('#photo').onchange=e=>{const f=e.target.files[0],p=$('#prev');if(f){p.src=URL.createObjectURL(f);p.classList.remove('hidden')}else p.classList.add('hidden')};
-$('#form').onsubmit=e=>{e.preventDefault();if(!$('#photo').files.length)return toast('Foto bukti wajib dilampirkan.');
- S.reports.unshift({id:Date.now(),area:$('#area').value,loc:$('#loc').value.trim(),cat:$('#cat').value,sev:$('#sev').value,mine:1});S.added++;
- $('#note').textContent=S.login?'Terkirim. Kamu dapat 50 poin setelah petugas mengangkut.':'Terkirim sebagai tamu. Masuk dulu jika ingin mendapat poin.';
- e.target.reset();$('#prev').classList.add('hidden');render();toast('Laporan terkirim ke antrean petugas.')};
-const QA={'Bagaimana cara lapor?':'Lampirkan foto, pilih kecamatan, tulis lokasi, lalu kirim. Tamu juga boleh lapor.','Kapan saya dapat poin?':'Setelah petugas mengangkut dan mengunggah foto bersih. Hanya akun yang sudah masuk yang dapat poin.','Siapa yang mengangkut?':'Petugas kebersihan mitra. Mereka punya tampilan sendiri di mode Petugas DLH.','Poin bisa ditukar apa?':'Kompos, pupuk cair, pot daur ulang, tas anyaman plastik. Buka menu Tukar Poin.'};
-$('#chips').innerHTML=Object.keys(QA).map(q=>`<button class="px-3 py-1.5 text-xs rounded-full border border-b text-b" data-q="${q}">${q}</button>`).join('');
-$('#chat').innerHTML='<div class="bg-slate-100 dark:bg-zinc-800 rounded-xl p-2.5 w-fit">Halo! Ada yang ingin ditanyakan?</div>';
-$('#chips').onclick=e=>{const q=e.target.dataset.q;if(!q)return;$('#chat').insertAdjacentHTML('beforeend',`<div class="bg-b text-white rounded-xl p-2.5 w-fit ml-auto">${q}</div><div class="bg-slate-100 dark:bg-zinc-800 rounded-xl p-2.5 w-fit">${QA[q]}</div>`)};
-render();
-</script>
+          <!-- Item 3 -->
+          <div class="border border-slate-200 rounded-2xl p-4 space-y-3 hover:border-teal-300 transition-all">
+            <div class="h-32 bg-teal-50 rounded-xl flex items-center justify-center text-[#2C7A7A]">
+              <i data-lucide="ticket" class="w-12 h-12"></i>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold text-teal-700 bg-teal-100 px-2 py-0.5 rounded">100 Poin Warga</span>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Voucher Belanja Sembako Rp 25.000</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Dapat digunakan di toko kelontong mitra RT/RW.</p>
+            </div>
+            <div class="text-xs font-semibold text-slate-700 flex justify-between border-t pt-2">
+              <span>Stok: 30 Lembar</span>
+              <span class="text-emerald-600">Aktif Dijual</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ================= MODAL 1: FORMULIR PELAPORAN CEPAT (<30 DETIK) ================= -->
+  <div id="report-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-150">
+      
+      <div class="px-6 py-4 bg-gradient-to-r from-[#1B4D4D] to-[#2C7A7A] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="alert-circle" class="w-5 h-5 text-[#5EEAD4]"></i>
+          <h3 class="font-bold text-base">Formulir Lapor Cepat (&lt;30 Detik)</h3>
+        </div>
+        <button onclick="closeModal('report-modal')" class="text-white/80 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="quickReportForm" onsubmit="handleReportSubmit(event)" class="p-6 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">1. Lokasi Kejadian (GPS Auto-Detect)</label>
+          <div class="flex gap-2">
+            <input id="reportLocation" type="text" value="Jl. Simpang Gajayana No. 18, Dinoyo, Lowokwaru, Malang" required class="flex-grow p-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-[#2C7A7A]">
+            <button type="button" onclick="detectGPS()" class="px-3 py-2 bg-teal-50 text-[#2C7A7A] border border-teal-200 rounded-xl font-bold flex items-center gap-1 hover:bg-teal-100">
+              <i data-lucide="crosshair" class="w-3.5 h-3.5"></i> GPS Saya
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">2. Jenis Kendala / Tingkat Urgensi</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="border border-teal-300 bg-teal-50/50 p-2.5 rounded-xl cursor-pointer flex items-center gap-2">
+              <input type="radio" name="issueType" value="Saluran Tersumbat" checked class="text-[#2C7A7A]">
+              <div>
+                <div class="font-bold text-slate-800">Drainase Mampet</div>
+                <div class="text-[10px] text-slate-500">Air meluap ke badan jalan</div>
+              </div>
+            </label>
+            <label class="border border-slate-200 p-2.5 rounded-xl cursor-pointer flex items-center gap-2 hover:border-teal-200">
+              <input type="radio" name="issueType" value="Tumpukan Sampah Liar" class="text-[#2C7A7A]">
+              <div>
+                <div class="font-bold text-slate-800">Sampah Liar</div>
+                <div class="text-[10px] text-slate-500">Timbunan bau &amp; lalat</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">3. Unggah Foto Bukti Kejadian</label>
+          <div class="border-2 border-dashed border-teal-200 rounded-2xl p-4 text-center bg-teal-50/30 hover:bg-teal-50/60 cursor-pointer transition-colors" onclick="document.getElementById('fileInput').click()">
+            <i data-lucide="camera" class="w-8 h-8 text-[#2C7A7A] mx-auto mb-1"></i>
+            <span class="font-bold text-slate-700 block">Klik untuk Ambil / Upload Foto</span>
+            <span class="text-[10px] text-slate-400">AI otomatis memindai volume &amp; estimasi berat sampah</span>
+            <input type="file" id="fileInput" class="hidden" onchange="alert('Foto berhasil dipilih! AI mendeteksi volume ~450 kg plastik.')">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">4. Catatan Singkat (Opsional)</label>
+          <input type="text" placeholder="Contoh: Air got mulai masuk ke teras warga saat hujan..." class="w-full p-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-[#2C7A7A]">
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeModal('report-modal')" class="px-4 py-2.5 border border-slate-200 text-slate-600 rounded-xl font-bold">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2.5 bg-[#C23B38] hover:bg-[#a92e2c] text-white rounded-xl font-bold shadow-md shadow-red-200 flex items-center gap-1.5">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i> Kirim Laporan Sekarang
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: ECO-SHOP REDEMPTION MODAL ================= -->
+  <div id="shop-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-150">
+      <div class="px-6 py-4 bg-[#2C7A7A] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="gift" class="w-5 h-5 text-[#5EEAD4]"></i>
+          <h3 class="font-bold text-base">Konfirmasi Penukaran Eco-Points</h3>
+        </div>
+        <button onclick="closeModal('shop-modal')" class="text-white/80 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <div class="flex items-center gap-4 p-3 bg-teal-50 rounded-2xl border border-teal-100">
+          <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-[#2C7A7A] flex-shrink-0">
+            <i data-lucide="package" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-800 text-sm">Pupuk Kompos Organik Super (5kg)</h4>
+            <div class="text-[#2C7A7A] font-bold">Biaya: 150 Eco-Points</div>
+            <div class="text-[10px] text-slate-500">Sisa saldo Anda setelah tukar: 1,100 Poin</div>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-slate-600">
+          <div class="font-bold text-slate-800">Metode Pengambilan:</div>
+          <label class="flex items-center gap-2 border border-slate-200 p-2.5 rounded-xl cursor-pointer">
+            <input type="radio" name="pickup" checked class="text-[#2C7A7A]">
+            <span>Ambil di Bank Sampah Induk Malang (Jl. S. Supriadi)</span>
+          </label>
+          <label class="flex items-center gap-2 border border-slate-200 p-2.5 rounded-xl cursor-pointer">
+            <input type="radio" name="pickup" class="text-[#2C7A7A]">
+            <span>Kirim bersama Armada Satgas DLH (Gratis Ongkir)</span>
+          </label>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button onclick="closeModal('shop-modal')" class="px-4 py-2.5 border border-slate-200 text-slate-600 rounded-xl font-bold">
+            Batal
+          </button>
+          <button onclick="alert('Selamat! Voucher penukaran 150 poin berhasil dibuat. Tunjukkan QR code di depo pengambilan.'); closeModal('shop-modal')" class="px-5 py-2.5 bg-[#2C7A7A] hover:bg-[#1B4D4D] text-white rounded-xl font-bold">
+            Konfirmasi &amp; Tukar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= GLOBAL FOOTER ================= -->
+  <footer class="bg-white border-t border-slate-200 mt-16 pt-8 pb-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+      <div class="flex items-center gap-2 font-bold text-slate-800">
+        <span class="text-[#2C7A7A]">DrainAct</span> &bull; Civic Hydrology &amp; Circular Economy Ecosystem
+      </div>
+      <div>Prototype Live Ready &bull; Berstandar SPBE &amp; Satu Data Indonesia</div>
+    </div>
+  </footer>
+
+  <!-- ================= PROTOTYPE JAVASCRIPT ================= -->
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+
+    // Tab switcher logic
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      const activeEl = document.getElementById(tabId);
+      if (activeEl) activeEl.classList.add('active');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-[#2C7A7A]', 'text-white');
+        btn.classList.add('text-slate-300');
+      });
+
+      const currentBtn = document.getElementById('btn-' + tabId);
+      if (currentBtn) {
+        currentBtn.classList.add('bg-[#2C7A7A]', 'text-white');
+        currentBtn.classList.remove('text-slate-300');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Modal Helpers
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function detectGPS() {
+      const locInput = document.getElementById('reportLocation');
+      locInput.value = "Titik GPS Terkunci: -7.9528, 112.6145 (Jl. Gajayana, Malang)";
+      alert('Koordinat GPS berhasil dikunci secara presisi!');
+    }
+
+    function handleReportSubmit(e) {
+      e.preventDefault();
+      alert('Laporan berhasil dikirim ke server DLH! Tiket #RPT-2025-0843 telah diterbitkan. Tim Satgas terdekat sedang didisposisikan.');
+      closeModal('report-modal');
+    }
+  </script>
 </body>
 </html>
